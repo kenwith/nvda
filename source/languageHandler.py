@@ -152,11 +152,11 @@ def getWindowsLanguage():
 
 def setLanguage(lang: str) -> None:
 	'''
-	Sets the following using `lang` such as "en", "ru_RU", or "es-ES". Use "Windows" to use the system locale
+	Sets the following using `lang` such as "en", "ru_RU", or "es-ES". Use "Windows" to use the system locale.
 	 - the windows locale for the thread (fallback to system locale)
 	 - the translation service (fallback to English)
 	 - languageHandler.curLang (match the translation service)
-	 - the python locale for the thread (match the translation service, fallback to system default)
+	 - the python locale for the thread (fallback to system locale)
 	'''
 	global curLang
 	if lang == "Windows":
@@ -180,12 +180,13 @@ def setLanguage(lang: str) -> None:
 
 	# #9207: Python 3.8 adds gettext.pgettext, so add it to the built-in namespace.
 	trans.install(names=["pgettext"])
-	setLocale(curLang)
+	setLocale(lang)
 
 
 def setLocale(localeName: str) -> None:
 	'''
 	Set python's locale using a `localeName` such as "en", "ru_RU", or "es-ES".
+	Use "Windows" for the system locale.
 	Will fallback on `curLang` if it cannot be set and finally fallback to the system locale.
 	'''
 
@@ -212,42 +213,39 @@ def setLocale(localeName: str) -> None:
 	ValueError: unknown locale: en-GB
 	'''
 	originalLocaleName = localeName
-	# Try setting Python's locale to localeName
-	try:
-		locale.setlocale(locale.LC_ALL, localeName)
-		locale.getlocale()
-		log.debug(f"set python locale to {localeName}")
+
+	if localeName == "Windows":
+		locale.setlocale(locale.LC_ALL, '')
+		log.debug(f"set python locale to system default")
 		return
-	except locale.Error:
-		log.debugWarning(f"python locale {localeName} could not be set")
-	except ValueError:
-		log.debugWarning(f"python locale {localeName} could not be retrieved with getlocale")
+
+	def _LocaleNameSetAndSupported(localeName: str):
+		try:
+			locale.setlocale(locale.LC_ALL, localeName)
+			locale.getlocale()
+			log.debug(f"set python locale to {localeName}")
+			return True
+		except locale.Error:
+			log.debugWarning(f"python locale {localeName} could not be set")
+		except ValueError:
+			log.debugWarning(f"python locale {localeName} could not be retrieved with getlocale")
+		return False
+
+	# Try setting Python's locale to localeName
+	if _LocaleNameSetAndSupported(localeName):
+		return
 
 	if '-' in localeName:
 		# Python couldn't support the language-country locale, try language_country.
-		try:
-			localeName = localeName.replace('-', '_')
-			locale.setlocale(locale.LC_ALL, localeName)
-			locale.getlocale()
-			log.debug(f"set python locale to {localeName}")
+		localeName = localeName.replace('-', '_')
+		if _LocaleNameSetAndSupported(localeName):
 			return
-		except locale.Error:
-			log.debugWarning(f"python locale {localeName} could not be set")
-		except ValueError:
-			log.debugWarning(f"python locale {localeName} could not be retrieved with getlocale")
 
 	if '_' in localeName:
 		# Python couldn't support the language_country locale, just try language.
-		try:
-			localeName = localeName.split('_')[0]
-			locale.setlocale(locale.LC_ALL, localeName)
-			locale.getlocale()
-			log.debug(f"set python locale to {localeName}")
+		localeName = localeName.split('_')[0]
+		if _LocaleNameSetAndSupported(localeName):
 			return
-		except locale.Error:
-			log.debugWarning(f"python locale {localeName} could not be set")
-		except ValueError:
-			log.debugWarning(f"python locale {localeName} could not be retrieved with getlocale")
 
 	try:
 		locale.getlocale()
@@ -256,8 +254,8 @@ def setLocale(localeName: str) -> None:
 		# reset to default locale
 		if originalLocaleName == curLang:
 			# reset to system locale default if we can't set the current lang's locale
-			locale.setlocale(locale.LC_ALL, "")
-			log.debugWarning(f"set python locale to system default")
+			log.debugWarning(f"setting python locale to system default")
+			setLocale("Windows")
 		else:
 			log.debugWarning(f"setting python locale to the current language {curLang}")
 			# fallback and try to reset the locale to the current lang

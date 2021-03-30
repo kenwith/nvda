@@ -451,7 +451,7 @@ def main():
 			log.error("Failed to initialize wx locale",exc_info=True)
 		finally:
 			# Revert wx's changes to the python locale
-			languageHandler.setLocale(languageHandler.curLang)
+			languageHandler.setLocale(config.conf["general"]["language"])
 
 	log.debug("Initializing garbageHandler")
 	garbageHandler.initialize()

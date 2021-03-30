@@ -27,21 +27,17 @@ lastSayAllMode = None
 _activeSayAll = lambda: None # Return None when called like a dead weakref.
 
 
-def getSpeechWithoutPauses() -> "speech.SpeechWithoutPauses":
-	"""Returns an instance of `speech.SpeechWithoutPauses` which should be used for say all
-	creating it if necessary."""
-	if getSpeechWithoutPauses.speechWithoutPausesInstance is None:
-		getSpeechWithoutPauses.speechWithoutPausesInstance = speech.SpeechWithoutPauses(speakFunc=speech.speak)
-	return getSpeechWithoutPauses.speechWithoutPausesInstance
-
-
-getSpeechWithoutPauses.speechWithoutPausesInstance: Optional["speech.SpeechWithoutPauses"] = None
+_speechWithoutPausesInstance = speech.SpeechWithoutPauses(speakFunc=speech.speak)
 
 
 def stop():
+	'''
+	Stops any active objects reader and resets the sayAllHandler's speech.SpeechWithoutPauses instance
+	'''
 	active = _activeSayAll()
 	if active:
 		active.stop()
+	_speechWithoutPausesInstance.reset()
 
 def isRunning():
 	"""Determine whether say all is currently running.
@@ -164,7 +160,7 @@ class _TextReader(garbageHandler.TrackedObject):
 			if isinstance(self.reader.obj, textInfos.DocumentWithPageTurns):
 				# Once the last line finishes reading, try turning the page.
 				cb = CallbackCommand(self.turnPage, name="say-all:turnPage")
-				getSpeechWithoutPauses().speakWithoutPauses([cb, EndUtteranceCommand()])
+				_speechWithoutPausesInstance.speakWithoutPauses([cb, EndUtteranceCommand()])
 			else:
 				self.finish()
 			return
@@ -196,7 +192,7 @@ class _TextReader(garbageHandler.TrackedObject):
 		seq = list(speech._flattenNestedSequences(speechGen))
 		seq.insert(0, cb)
 		# Speak the speech sequence.
-		spoke = getSpeechWithoutPauses().speakWithoutPauses(seq)
+		spoke = _speechWithoutPausesInstance.speakWithoutPauses(seq)
 		# Update the textInfo state ready for when speaking the next line.
 		self.speakTextInfoState = state.copy()
 
@@ -218,7 +214,7 @@ class _TextReader(garbageHandler.TrackedObject):
 			else:
 				# We don't want to buffer too much.
 				# Force speech. lineReached will resume things when speech catches up.
-				getSpeechWithoutPauses().speakWithoutPauses(None)
+				_speechWithoutPausesInstance.speakWithoutPauses(None)
 				# The first buffered line has now started speaking.
 				self.numBufferedLines -= 1
 
@@ -255,7 +251,7 @@ class _TextReader(garbageHandler.TrackedObject):
 		# we might switch synths too early and truncate the final speech.
 		# We do this by putting a CallbackCommand at the start of a new utterance.
 		cb = CallbackCommand(self.stop, name="say-all:stop")
-		getSpeechWithoutPauses().speakWithoutPauses([
+		_speechWithoutPausesInstance.speakWithoutPauses([
 			EndUtteranceCommand(),
 			cb,
 			EndUtteranceCommand()

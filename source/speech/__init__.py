@@ -117,7 +117,6 @@ def cancelSpeech():
 	# Import only for this function to avoid circular import.
 	import sayAllHandler
 	sayAllHandler.stop()
-	sayAllHandler.getSpeechWithoutPauses().reset()
 	if beenCanceled:
 		return
 	elif speechMode==speechMode_off:

@@ -100,7 +100,7 @@ What's New in NVDA
   - Function winVersion.getWinVer has been added to get a winVersion.WinVersion representing the currently running OS.
   - Convenience constants have been added for known Windows releases, see winVersion.WIN* constants.
 - IAccessibleHandler no longer star imports everything from IAccessible and IA2 COM interfaces - please use them directly. (#12232)
-- `sayAllHandler.stop` also resets the sayAllHandler SpeechWithoutPauses instance
+- `sayAllHandler.stop` also resets the `sayAllHandler` `SpeechWithoutPauses` instance
 
 
 = 2020.4 =

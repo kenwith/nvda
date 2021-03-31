@@ -24,7 +24,7 @@ default teardown
 
 default setup
 	start NVDA	standard-dontShowWelcomeDialog.ini
-	Sleep	1s
+	Sleep	0ms
 
 *** Test Cases ***
 

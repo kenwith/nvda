@@ -33,16 +33,17 @@ class _SayAllHandler:
 	@property
 	def speechWithoutPausesInstance(self) -> 'speech.SpeechWithoutPauses':
 		if self._speechWithoutPausesInstance is None:
-			log.error('attempting to use sayAll without calling initialize first')
+			log.error('attempting to use sayAll without calling initializeSpeechWithoutPauses first')
 			self.initializeSpeechWithoutPauses()  # TODO: or raise Error?
 			# raise AttributeError('call initializeSpeechWithoutPauses first before using sayAllHandler')
 		return self._speechWithoutPausesInstance
 
 	def initializeSpeechWithoutPauses(self):
 		'''
-		Initializes speech.SpeechWithoutPauses, as this cannot always be done when `SayAllHandler` is being 
+		Initializes speech.SpeechWithoutPauses, as this cannot always be done when `SayAllHandler` is being
 		imported without causing circular dependency issues.
 		'''
+		log.debug("initializing the speech without pauses instance for SayAllHandler")
 		self._speechWithoutPausesInstance = speech.SpeechWithoutPauses(speakFunc=speech.speak)
 
 	def stop(self):

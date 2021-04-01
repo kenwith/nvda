@@ -66,14 +66,14 @@ class _SayAllHandler:
 		return bool(self._getActiveSayAll())
 
 	def readObjects(self, obj: 'NVDAObjects.NVDAObject'):
-		reader = _ObjectsReader(obj)
+		reader = _ObjectsReader(self, obj)
 		self._getActiveSayAll = weakref.ref(reader)
 		reader.next()
 
 	def readText(self, cursor: CURSOR):
 		self.lastSayAllMode = cursor
 		try:
-			reader = _TextReader(cursor)
+			reader = _TextReader(self, cursor)
 		except NotImplementedError:
 			log.debugWarning("Unable to make reader", exc_info=True)
 			return
@@ -86,7 +86,8 @@ SayAllHandler = _SayAllHandler()
 
 class _ObjectsReader(garbageHandler.TrackedObject):
 
-	def __init__(self, root: 'NVDAObjects.NVDAObject'):
+	def __init__(self, handler: _SayAllHandler, root: 'NVDAObjects.NVDAObject'):
+		self.handler = handler
 		self.walker = self.walk(root)
 		self.prevObj = None
 
@@ -104,7 +105,7 @@ class _ObjectsReader(garbageHandler.TrackedObject):
 			return
 		if self.prevObj:
 			# We just started speaking this object, so move the navigator to it.
-			api.setNavigatorObject(self.prevObj, isFocus=SayAllHandler.lastSayAllMode == CURSOR_CARET)
+			api.setNavigatorObject(self.prevObj, isFocus=self.handler.lastSayAllMode == CURSOR_CARET)
 			winKernel.SetThreadExecutionState(winKernel.ES_SYSTEM_REQUIRED)
 		# Move onto the next object.
 		self.prevObj = obj = next(self.walker, None)
@@ -140,7 +141,8 @@ class _TextReader(garbageHandler.TrackedObject):
 	"""
 	MAX_BUFFERED_LINES = 10
 
-	def __init__(self, cursor: CURSOR):
+	def __init__(self, handler: _SayAllHandler, cursor: CURSOR):
+		self.handler = handler
 		self.cursor = cursor
 		self.trigger = SayAllProfileTrigger()
 		self.reader = None
@@ -180,7 +182,7 @@ class _TextReader(garbageHandler.TrackedObject):
 			if isinstance(self.reader.obj, textInfos.DocumentWithPageTurns):
 				# Once the last line finishes reading, try turning the page.
 				cb = CallbackCommand(self.turnPage, name="say-all:turnPage")
-				SayAllHandler.speechWithoutPausesInstance.speakWithoutPauses([cb, EndUtteranceCommand()])
+				self.handler.speechWithoutPausesInstance.speakWithoutPauses([cb, EndUtteranceCommand()])
 			else:
 				self.finish()
 			return
@@ -212,7 +214,7 @@ class _TextReader(garbageHandler.TrackedObject):
 		seq = list(speech._flattenNestedSequences(speechGen))
 		seq.insert(0, cb)
 		# Speak the speech sequence.
-		spoke = SayAllHandler.speechWithoutPausesInstance.speakWithoutPauses(seq)
+		spoke = self.handler.speechWithoutPausesInstance.speakWithoutPauses(seq)
 		# Update the textInfo state ready for when speaking the next line.
 		self.speakTextInfoState = state.copy()
 
@@ -235,7 +237,7 @@ class _TextReader(garbageHandler.TrackedObject):
 			else:
 				# We don't want to buffer too much.
 				# Force speech. lineReached will resume things when speech catches up.
-				SayAllHandler.speechWithoutPausesInstance.speakWithoutPauses(None)
+				self.handler.speechWithoutPausesInstance.speakWithoutPauses(None)
 				# The first buffered line has now started speaking.
 				self.numBufferedLines -= 1
 
@@ -272,7 +274,7 @@ class _TextReader(garbageHandler.TrackedObject):
 		# we might switch synths too early and truncate the final speech.
 		# We do this by putting a CallbackCommand at the start of a new utterance.
 		cb = CallbackCommand(self.stop, name="say-all:stop")
-		SayAllHandler.speechWithoutPausesInstance.speakWithoutPauses([
+		self.handler.speechWithoutPausesInstance.speakWithoutPauses([
 			EndUtteranceCommand(),
 			cb,
 			EndUtteranceCommand()

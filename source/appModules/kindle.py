@@ -106,11 +106,11 @@ class BookPageViewTreeInterceptor(DocumentWithPageTurns,ReviewCursorManager,Brow
 
 	def script_moveByPage_forward(self,gesture):
 		self._changePageScriptHelper(gesture)
-	script_moveByPage_forward.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveByPage_forward.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def script_moveByPage_back(self,gesture):
 		self._changePageScriptHelper(gesture,previous=True)
-	script_moveByPage_back.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveByPage_back.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def _tabOverride(self,direction):
 		return False

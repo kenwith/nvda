@@ -230,11 +230,11 @@ class CursorManager(documentBase.TextContainerObject,baseObject.ScriptableObject
 
 	def script_moveByPage_back(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_LINE,-config.conf["virtualBuffers"]["linesPerPage"],extraDetail=False)
-	script_moveByPage_back.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveByPage_back.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def script_moveByPage_forward(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_LINE,config.conf["virtualBuffers"]["linesPerPage"],extraDetail=False)
-	script_moveByPage_forward.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveByPage_forward.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def script_moveByCharacter_back(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_CHARACTER,-1,extraDetail=True,handleSymbols=True)
@@ -250,27 +250,27 @@ class CursorManager(documentBase.TextContainerObject,baseObject.ScriptableObject
 
 	def script_moveByLine_back(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_LINE,-1)
-	script_moveByLine_back.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveByLine_back.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def script_moveByLine_forward(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_LINE,1)
-	script_moveByLine_forward.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveByLine_forward.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def script_moveBySentence_back(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_SENTENCE,-1)
-	script_moveBySentence_back.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveBySentence_back.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def script_moveBySentence_forward(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_SENTENCE,1)
-	script_moveBySentence_forward.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveBySentence_forward.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def script_moveByParagraph_back(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_PARAGRAPH,-1)
-	script_moveByParagraph_back.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveByParagraph_back.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def script_moveByParagraph_forward(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_PARAGRAPH,1)
-	script_moveByParagraph_forward.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveByParagraph_forward.resumeSayAllMode = sayAll.CURSOR_CARET
 
 	def script_startOfLine(self,gesture):
 		self._caretMovementScriptHelper(gesture,textInfos.UNIT_CHARACTER,posUnit=textInfos.UNIT_LINE,extraDetail=True,handleSymbols=True)

@@ -461,7 +461,7 @@ class BrowseModeTreeInterceptor(treeInterceptorHandler.TreeInterceptor):
 		script = lambda self,gesture: self._quickNavScript(gesture, itemType, "next", nextError, readUnit)
 		script.__doc__ = nextDoc
 		script.__name__ = funcName
-		script.resumeSayAllMode=sayAll.CURSOR_CARET
+		script.resumeSayAllMode = sayAll.CURSOR_CARET
 		setattr(cls, funcName, script)
 		if key is not None:
 			cls.__gestures["kb:%s" % key] = scriptName
@@ -470,7 +470,7 @@ class BrowseModeTreeInterceptor(treeInterceptorHandler.TreeInterceptor):
 		script = lambda self,gesture: self._quickNavScript(gesture, itemType, "previous", prevError, readUnit)
 		script.__doc__ = prevDoc
 		script.__name__ = funcName
-		script.resumeSayAllMode=sayAll.CURSOR_CARET
+		script.resumeSayAllMode = sayAll.CURSOR_CARET
 		setattr(cls, funcName, script)
 		if key is not None:
 			cls.__gestures["kb:shift+%s" % key] = scriptName
@@ -1798,7 +1798,7 @@ class BrowseModeDocumentTreeInterceptor(documentBase.DocumentWithTableNavigation
 		if not willSayAllResume(gesture):
 			container.expand(textInfos.UNIT_LINE)
 			speech.speakTextInfo(container, reason=OutputReason.FOCUS)
-	script_moveToStartOfContainer.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_moveToStartOfContainer.resumeSayAllMode = sayAll.CURSOR_CARET
 	# Translators: Description for the Move to start of container command in browse mode. 
 	script_moveToStartOfContainer.__doc__=_("Moves to the start of the container element, such as a list or table")
 
@@ -1823,7 +1823,7 @@ class BrowseModeDocumentTreeInterceptor(documentBase.DocumentWithTableNavigation
 		if not willSayAllResume(gesture):
 			container.expand(textInfos.UNIT_LINE)
 			speech.speakTextInfo(container, reason=OutputReason.FOCUS)
-	script_movePastEndOfContainer.resumeSayAllMode=sayAll.CURSOR_CARET
+	script_movePastEndOfContainer.resumeSayAllMode = sayAll.CURSOR_CARET
 	# Translators: Description for the Move past end of container command in browse mode. 
 	script_movePastEndOfContainer.__doc__=_("Moves past the end  of the container element, such as a list or table")
 

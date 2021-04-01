@@ -14,7 +14,6 @@ import operator
 import locale
 import collections
 import colorsys
-import sayAll
 import eventHandler
 import braille
 from scriptHandler import script

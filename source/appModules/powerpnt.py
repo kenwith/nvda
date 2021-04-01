@@ -407,17 +407,17 @@ class DocumentWindow(PaneClassDC):
 
 	def handleSelectionChange(self):
 		"""Pushes focus to the newly selected object."""
-		if getattr(self,"_isHandlingSelectionChange",False):
+		if getattr(self, "_isHandlingSelectionChange", False):
 			# #3394: A COM event can cause this function to run within itself.
 			# This can cause double speaking, so stop here if we're already running.
 			return
-		self._isHandlingSelectionChange=True
+		self._isHandlingSelectionChange = True
 		try:
 			obj=self.selection
 			if not obj:
 				obj=IAccessible(windowHandle=self.windowHandle,IAccessibleObject=self.IAccessibleObject,IAccessibleChildID=self.IAccessibleChildID)
 			if obj and obj!=eventHandler.lastQueuedFocusObject:
-				eventHandler.queueEvent("gainFocus",obj)
+				eventHandler.queueEvent("gainFocus", obj)
 		finally:
 			self._isHandlingSelectionChange=False
 

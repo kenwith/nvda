@@ -455,12 +455,12 @@ class InputManager(baseObject.AutoPropertyObject):
 		wasInSayAll=False
 		if gesture.isModifier:
 			if not self.lastModifierWasInSayAll:
-				wasInSayAll=self.lastModifierWasInSayAll=sayAll.SayAllHandler.isRunning()
+				wasInSayAll = self.lastModifierWasInSayAll = sayAll.SayAllHandler.isRunning()
 		elif self.lastModifierWasInSayAll:
 			wasInSayAll=True
 			self.lastModifierWasInSayAll=False
 		else:
-			wasInSayAll=sayAll.SayAllHandler.isRunning()
+			wasInSayAll = sayAll.SayAllHandler.isRunning()
 		if wasInSayAll:
 			gesture.wasInSayAll=True
 

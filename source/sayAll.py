@@ -3,7 +3,7 @@
 # This file may be used under the terms of the GNU General Public License, version 2 or later.
 # For more details see: https://www.gnu.org/licenses/gpl-2.0.html
 
-from typing import Literal
+from typing import Literal, TYPE_CHECKING
 import weakref
 import garbageHandler
 import speech
@@ -16,6 +16,9 @@ import queueHandler
 import winKernel
 
 from speech.commands import CallbackCommand, EndUtteranceCommand
+
+if TYPE_CHECKING:
+	import NVDAObjects
 
 CURSOR_CARET = 0
 CURSOR_REVIEW = 1
@@ -89,11 +92,11 @@ class _ObjectsReader(garbageHandler.TrackedObject):
 
 	def walk(self, obj: 'NVDAObjects.NVDAObject'):
 		yield obj
-		child=obj.simpleFirstChild
+		child = obj.simpleFirstChild
 		while child:
 			for descendant in self.walk(child):
 				yield descendant
-			child=child.simpleNext
+			child = child.simpleNext
 
 	def next(self):
 		if not self.walker:
@@ -218,7 +221,8 @@ class _TextReader(garbageHandler.TrackedObject):
 			self.reader.collapse(end=True)
 		except RuntimeError:
 			# This occurs in Microsoft Word when the range covers the end of the document.
-			# without this exception to indicate that further collapsing is not possible, say all could enter an infinite loop.
+			# without this exception to indicate that further collapsing is not possible,
+			# say all could enter an infinite loop.
 			self.finish()
 			return
 		if not spoke:
@@ -242,7 +246,7 @@ class _TextReader(garbageHandler.TrackedObject):
 		if self.cursor == CURSOR_CARET:
 			updater.updateCaret()
 		if self.cursor != CURSOR_CARET or config.conf["reviewCursor"]["followCaret"]:
-			api.setReviewPosition(updater, isCaret=self.cursor==CURSOR_CARET)
+			api.setReviewPosition(updater, isCaret=self.cursor == CURSOR_CARET)
 		winKernel.SetThreadExecutionState(winKernel.ES_SYSTEM_REQUIRED)
 		if self.numBufferedLines == 0:
 			# This was the last line spoken, so move on.
@@ -283,6 +287,7 @@ class _TextReader(garbageHandler.TrackedObject):
 
 	def __del__(self):
 		self.stop()
+
 
 class SayAllProfileTrigger(config.ProfileTrigger):
 	"""A configuration profile trigger for when say all is in progress.

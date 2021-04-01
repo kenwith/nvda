@@ -115,8 +115,8 @@ def cancelSpeech():
 	"""Interupts the synthesizer from currently speaking"""
 	global beenCanceled, isPaused
 	# Import only for this function to avoid circular import.
-	import sayAllHandler
-	sayAllHandler.stop()
+	import sayAll
+	sayAll.SayAllHandler.stop()
 	if beenCanceled:
 		return
 	elif speechMode==speechMode_off:

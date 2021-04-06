@@ -81,11 +81,11 @@ class MainFrame(wx.Frame):
 				self.Hide()
 
 	def _onDestroy(self, evt: wx.EVT_WINDOW_DESTROY):
-		evt.Skip(skip=True)  # Allow other handlers to process this event.
+		evt.Skip(skip=False)  # blocks other handlers as wxCommandEvents must only be processed by one handler
 		# wx destroys child Windows automatically but `wx.adv.TaskBarIcon` is not a window
 		# so it must be set to be destroyed when destroying our main frame window (#12243)
 		log.debug(f"destroying systray icon")
-		wx.CallAfter(self.sysTrayIcon.Destroy)
+		self.sysTrayIcon.Destroy()
 
 	def prePopup(self):
 		"""Prepare for a popup.
@@ -386,6 +386,7 @@ def safeAppExit():
 		else:
 			log.debug(f"closing window {window} during exit process")
 			wx.CallAfter(window.Close)
+
 
 class SysTrayIcon(wx.adv.TaskBarIcon):
 

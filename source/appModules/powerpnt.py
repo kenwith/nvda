@@ -15,7 +15,7 @@ import queueHandler
 import colors
 import api
 import speech
-import sayAllHandler
+from speech import sayAll
 import NVDAHelper
 import winUser
 import msoAutoShapeTypes
@@ -407,17 +407,17 @@ class DocumentWindow(PaneClassDC):
 
 	def handleSelectionChange(self):
 		"""Pushes focus to the newly selected object."""
-		if getattr(self,"_isHandlingSelectionChange",False):
+		if getattr(self, "_isHandlingSelectionChange", False):
 			# #3394: A COM event can cause this function to run within itself.
 			# This can cause double speaking, so stop here if we're already running.
 			return
-		self._isHandlingSelectionChange=True
+		self._isHandlingSelectionChange = True
 		try:
 			obj=self.selection
 			if not obj:
 				obj=IAccessible(windowHandle=self.windowHandle,IAccessibleObject=self.IAccessibleObject,IAccessibleChildID=self.IAccessibleChildID)
 			if obj and obj!=eventHandler.lastQueuedFocusObject:
-				eventHandler.queueEvent("gainFocus",obj)
+				eventHandler.queueEvent("gainFocus", obj)
 		finally:
 			self._isHandlingSelectionChange=False
 
@@ -1097,7 +1097,7 @@ class SlideShowTreeInterceptor(DocumentTreeInterceptor):
 
 	def reportNewSlide(self):
 		self.makeTextInfo(textInfos.POSITION_FIRST).updateCaret()
-		sayAllHandler.readText(sayAllHandler.CURSOR_CARET)
+		sayAll.SayAllHandler.readText(sayAll.CURSOR_CARET)
 
 	def script_toggleNotesMode(self,gesture):
 		self.rootNVDAObject.notesMode=not self.rootNVDAObject.notesMode

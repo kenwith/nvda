@@ -485,7 +485,7 @@ class InitialDevelopmentTests(unittest.TestCase):
 		the features they test.
 		Manual test steps are kept in unit tests doc string, they can be run in the NVDA python console after
 		the following imports:
-			import sayAll, appModuleHandler
+			from speech import sayAll, appModuleHandler
 	"""
 
 	def setUp(self):
@@ -834,7 +834,7 @@ class InitialDevelopmentTests(unittest.TestCase):
 	def test_4_profiles(self):
 		"""Text, pitch, text, enter profile1, enter profile2, text, exit profile1, text.
 		Manual Test (in NVDA python console):
-			import sayAll, appModuleHandler
+			from speech import sayAll, appModuleHandler
 			t1 = sayAll.SayAllProfileTrigger()
 			t2 = appModuleHandler.AppProfileTrigger("notepad")
 			wx.CallLater(500, speech.speak, [
@@ -912,7 +912,7 @@ class InitialDevelopmentTests(unittest.TestCase):
 	def test_5_profiles(self):
 		"""Enter profile, text, exit profile.
 		Manual Test (in NVDA python console):
-			import sayAll
+			from speech import sayAll
 			trigger = sayAll.SayAllProfileTrigger()
 			wx.CallLater(500, speech.speak, [
 				ConfigProfileTriggerCommand(trigger, True), u"5 6 7 8",
@@ -954,7 +954,7 @@ class InitialDevelopmentTests(unittest.TestCase):
 	def test_10_SPRI_profiles(self):
 		"""Utterance at SPRI_NORMAL. Utterance at SPRI_NOW with profile switch.
 		Manual Test (in NVDA python console):
-			import sayAll;
+			from speech import sayAll;
 			trigger = sayAll.SayAllProfileTrigger();
 			wx.CallLater(500, speech.speak, [
 				ConfigProfileTriggerCommand(trigger, True),
@@ -1000,7 +1000,7 @@ class InitialDevelopmentTests(unittest.TestCase):
 	def test_11_SPRI_Profile(self):
 		"""Utterance at SPRI_NORMAL with profile switch. Utterance at SPRI_NOW.
 		Manual Test (in NVDA python console):
-			import sayAll
+			from speech import sayAll
 			trigger = sayAll.SayAllProfileTrigger()
 			wx.CallLater(500, speech.speak, [
 				ConfigProfileTriggerCommand(trigger, True),
@@ -1064,7 +1064,7 @@ class InitialDevelopmentTests(unittest.TestCase):
 	def test_12_SPRI_profile(self):
 		"""Utterance at SPRI_NORMAL with profile 1. Utterance at SPRI_NOW with profile 2.
 		Manual Test (in NVDA python console):
-			import sayAll, appModuleHandler
+			from speech import sayAll, appModuleHandler
 			t1 = sayAll.SayAllProfileTrigger()
 			t2 = appModuleHandler.AppProfileTrigger("notepad")
 			wx.CallLater(500, speech.speak, [

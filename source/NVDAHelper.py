@@ -386,7 +386,7 @@ def nvdaControllerInternal_inputLangChangeNotify(threadID,hkl,layoutString):
 	#But threadIDs for console windows are always wrong so don't ignore for those.
 	if not isinstance(focus,NVDAObjects.window.Window) or (threadID!=focus.windowThreadID and focus.windowClassName!="ConsoleWindowClass"):
 		return 0
-	import sayAll
+	from speech import sayAll
 	#Never announce changes while in sayAll (#1676)
 	if sayAll.SayAllHandler.isRunning():
 		return 0

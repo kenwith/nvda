@@ -22,7 +22,7 @@ from NVDAObjects.window import DisplayModelEditableText
 from ..behaviors import EditableTextWithoutAutoSelectDetection
 from NVDAObjects.window.winword import *
 from NVDAObjects.window.winword import WordDocumentTreeInterceptor
-import sayAll
+from speech import sayAll
 
 
 class WordDocument(IAccessible,EditableTextWithoutAutoSelectDetection,WordDocument):

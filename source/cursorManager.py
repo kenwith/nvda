@@ -16,7 +16,7 @@ import documentBase
 import gui
 from gui import guiHelper
 import gui.contextHelp
-import sayAll
+from speech import sayAll
 import review
 from scriptHandler import willSayAllResume, script
 import textInfos

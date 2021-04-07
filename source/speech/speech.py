@@ -56,8 +56,7 @@ from logHandler import log
 import config
 import aria
 from .priorities import Spri
-from . import withoutPauses
-SpeechWithoutPauses = withoutPauses.SpeechWithoutPauses
+
 
 speechMode_off=0
 speechMode_beeps=1
@@ -116,7 +115,7 @@ def cancelSpeech():
 	"""Interupts the synthesizer from currently speaking"""
 	global beenCanceled, isPaused
 	# Import only for this function to avoid circular import.
-	import sayAll
+	from speech import sayAll
 	sayAll.SayAllHandler.stop()
 	if beenCanceled:
 		return

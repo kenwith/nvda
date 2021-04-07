@@ -33,7 +33,7 @@ import textInfos
 import braille
 import vision
 import speech
-import sayAll
+from speech import sayAll
 import treeInterceptorHandler
 import inputCore
 import api

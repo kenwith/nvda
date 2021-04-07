@@ -15,7 +15,7 @@ import queueHandler
 import colors
 import api
 import speech
-import sayAll
+from speech import sayAll
 import NVDAHelper
 import winUser
 import msoAutoShapeTypes

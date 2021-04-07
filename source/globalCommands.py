@@ -19,7 +19,7 @@ import controlTypes
 import api
 import textInfos
 import speech
-import sayAll
+from speech import sayAll
 from NVDAObjects import NVDAObject, NVDAObjectTextInfo
 import globalVars
 from logHandler import log

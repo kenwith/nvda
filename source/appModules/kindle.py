@@ -8,7 +8,7 @@ from comtypes import COMError
 from comtypes.hresult import S_OK
 import appModuleHandler
 import speech
-import sayAll
+from speech import sayAll
 import api
 from scriptHandler import willSayAllResume, isScriptWaiting
 import controlTypes

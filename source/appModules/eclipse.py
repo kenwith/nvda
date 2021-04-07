@@ -12,7 +12,7 @@ import speech
 import braille
 import ui
 import api
-import sayAll
+from speech import sayAll
 import eventHandler
 import keyboardHandler
 from scriptHandler import script

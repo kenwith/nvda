@@ -8,7 +8,7 @@
 import unittest
 from scriptHandler import script
 from inputCore import SCRCAT_MISC
-from sayAll import CURSOR_CARET
+from speech.sayAll import CURSOR_CARET
 
 class TestScriptDecorator(unittest.TestCase):
 	"""A test that verifies the functionality of the L{scriptHandler.script} decorator."""

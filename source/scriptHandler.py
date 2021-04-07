@@ -10,7 +10,7 @@ import inspect
 import types
 import config
 import speech
-import sayAll
+from speech import sayAll
 import appModuleHandler
 import api
 import queueHandler

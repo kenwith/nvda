@@ -9,7 +9,7 @@
 """
 
 import time
-import sayAll
+from speech import sayAll
 import api
 import review
 from baseObject import ScriptableObject

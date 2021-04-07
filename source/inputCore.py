@@ -18,7 +18,7 @@ import time
 from typing import Dict, Any, Tuple, List, Union
 
 import configobj
-import sayAll
+from speech import sayAll
 import baseObject
 import scriptHandler
 import queueHandler

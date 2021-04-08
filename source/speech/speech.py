@@ -192,7 +192,8 @@ def spellTextInfo(
 		useCharacterDescriptions: bool = False,
 		priority: Optional[Spri] = None
 ) -> None:
-	"""Spells the text from the given TextInfo, honouring any LangChangeCommand objects it finds if autoLanguageSwitching is enabled."""
+	"""Spells the text from the given TextInfo, honouring any LangChangeCommand objects it finds if
+	autoLanguageSwitching is enabled."""
 	if not config.conf['speech']['autoLanguageSwitching']:
 		speakSpelling(info.text, useCharacterDescriptions=useCharacterDescriptions)
 		return
@@ -232,8 +233,10 @@ def getSpellingSpeech(  # noqa: C901
 								useCharacterDescriptions: bool = False
 ) -> Generator[SequenceItemT, None, None]:
 	defaultLanguage = getCurrentLanguage()
-	if not locale or (not config.conf['speech']['autoDialectSwitching']
-					  and locale.split('_')[0] == defaultLanguage.split('_')[0]):
+	if not locale or (
+		not config.conf['speech']['autoDialectSwitching']
+		and locale.split('_')[0] == defaultLanguage.split('_')[0]
+	):
 		locale = defaultLanguage
 
 	if not text:
@@ -289,7 +292,9 @@ def getSpellingSpeech(  # noqa: C901
 
 
 def getCharDescListFromText(text, locale):
-	"""This method prepares a list, which contains character and its description for all characters the text is made up of, by checking the presence of character descriptions in characterDescriptions.dic of that locale for all possible combination of consecutive characters in the text.
+	"""This method prepares a list, which contains character and its description for all characters the text
+	is made up of, by checking the presence of character descriptions in characterDescriptions.dic of that
+	locale for all possible combination of consecutive characters in the text.
 	This is done to take care of conjunct characters present in several languages such as Hindi, Urdu, etc.
 	"""
 	charDescList = []
@@ -353,7 +358,8 @@ def getObjectPropertiesSpeech(  # noqa: C901
 			# named "isCurrent", it's type should always be controltypes.IsCurrent
 			newPropertyValues['current'] = obj.isCurrent
 		elif value:
-			# Certain properties such as row and column numbers have presentational versions, which should be used for speech if they are available.
+			# Certain properties such as row and column numbers have presentational versions, which should be
+			# used for speech if they are available.
 			# Therefore redirect to those values first if they are available, falling
 			# back to the normal properties if not.
 			names = [name]
@@ -376,8 +382,10 @@ def getObjectPropertiesSpeech(  # noqa: C901
 			newPropertyValues['positionInfo_level'] = positionInfo['level']
 		if allowedProperties.get('positionInfo_indexInGroup', False) and 'indexInGroup' in positionInfo:
 			newPropertyValues['positionInfo_indexInGroup'] = positionInfo['indexInGroup']
-		if allowedProperties.get('positionInfo_similarItemsInGroup',
-								 False) and 'similarItemsInGroup' in positionInfo:
+		if (
+			allowedProperties.get('positionInfo_similarItemsInGroup', False)
+			and 'similarItemsInGroup' in positionInfo
+		):
 			newPropertyValues['positionInfo_similarItemsInGroup'] = positionInfo['similarItemsInGroup']
 	# Fetched the cached properties and update them with the new ones
 	oldCachedPropertyValues = getattr(obj, '_speakObjectPropertiesCache', {}).copy()
@@ -409,7 +417,8 @@ def getObjectPropertiesSpeech(  # noqa: C901
 			pass
 	if allowedProperties.get('placeholder', False):
 		newPropertyValues['placeholder'] = obj.placeholder
-	# When speaking an object due to a focus change, the 'selected' state should not be reported if only one item is selected.
+	# When speaking an object due to a focus change, the 'selected' state should not be reported if only one
+	# item is selected.
 	# This is because that one item will be the focused object, and saying selected is redundant.
 	# Rather, 'unselected' will be spoken for an unselected object if 1 or more items are selected.
 	states = newPropertyValues.get('states')
@@ -421,7 +430,8 @@ def getObjectPropertiesSpeech(  # noqa: C901
 			and obj.selectionContainer
 			and obj.selectionContainer.getSelectedItemsCount(2) == 1
 		):
-			# We must copy the states set and  put it back in newPropertyValues otherwise mutating the original states set in-place will wrongly change the cached states.
+			# We must copy the states set and  put it back in newPropertyValues otherwise mutating the
+			# original states set in-place will wrongly change the cached states.
 			# This would then cause 'selected' to be announced as a change when any
 			# other state happens to change on this object in future.
 			states = states.copy()
@@ -445,11 +455,13 @@ def _getPlaceholderSpeechIfTextEmpty(
 		obj,
 		reason: OutputReason,
 ) -> Tuple[bool, SpeechSequence]:
-	""" Attempt to get speech for placeholder attribute if text for 'obj' is empty. Don't report the placeholder
-					value unless the text is empty, because it is confusing to hear the current value (presumably typed by the
-					user) *and* the placeholder. The placeholder should "disappear" once the user types a value.
-	@return: (True, SpeechSequence) if text for obj was considered empty and we attempted to get speech for the
-					placeholder value. (False, []) if text for obj was not considered empty.
+	"""
+	Attempt to get speech for placeholder attribute if text for 'obj' is empty. Don't report the placeholder
+	value unless the text is empty, because it is confusing to hear the current value (presumably typed by the
+	user) *and* the placeholder. The placeholder should "disappear" once the user types a value.
+
+	@return: (True, SpeechSequence) if text for obj was considered empty and we attempted to get speech for
+	the placeholder value. (False, []) if text for obj was not considered empty.
 	"""
 	textEmpty = obj._isTextEmpty
 	if textEmpty:
@@ -739,8 +751,10 @@ def speak(  # noqa: C901
 			if not autoLanguageSwitching:
 				continue
 			curLanguage = item.lang
-			if not curLanguage or (not autoDialectSwitching and curLanguage.split('_')
-								   [0] == defaultLanguageRoot):
+			if not curLanguage or (
+				not autoDialectSwitching and curLanguage.split('_')
+				[0] == defaultLanguageRoot
+			):
 				curLanguage = defaultLanguage
 		elif isinstance(item, str):
 			if not item:
@@ -869,7 +883,9 @@ def speakSelectionChange(  # noqa: C901
 	"""Speaks a change in selection, either selected or unselected text.
 	@param oldInfo: a TextInfo instance representing what the selection was before
 	@param newInfo: a TextInfo instance representing what the selection is now
-	@param generalize: if True, then this function knows that the text may have changed between the creation of the oldInfo and newInfo objects, meaning that changes need to be spoken more generally, rather than speaking the specific text, as the bounds may be all wrong.
+	@param generalize: if True, then this function knows that the text may have changed between the creation
+	of the oldInfo and newInfo objects, meaning that changes need to be spoken more generally, rather than
+	speaking the specific text, as the bounds may be all wrong.
 	@param priority: The speech priority.
 	"""
 	selectedTextList = []
@@ -1005,7 +1021,8 @@ def speakTypedCharacters(ch: str):
 
 
 class SpeakTextInfoState(object):
-	"""Caches the state of speakTextInfo such as the current controlField stack, current formatfield and indentation."""
+	"""Caches the state of speakTextInfo such as the current controlField stack, current formatfield and
+	indentation."""
 
 	__slots__ = [
 		'objRef',
@@ -1159,11 +1176,14 @@ def getTextInfoSpeech(  # noqa: C901
 	# Calculate how many fields in the old and new controlFieldStacks are the same
 	commonFieldCount = 0
 	for count in range(min(len(newControlFieldStack), len(controlFieldStackCache))):
-		# #2199: When comparing controlFields try using uniqueID if it exists before resorting to compairing the entire dictionary
+		# #2199: When comparing controlFields try using uniqueID if it exists before resorting to compairing
+		# the entire dictionary
 		oldUniqueID = controlFieldStackCache[count].get('uniqueID')
 		newUniqueID = newControlFieldStack[count].get('uniqueID')
-		if ((oldUniqueID is not None or newUniqueID is not None) and newUniqueID == oldUniqueID) or (
-				newControlFieldStack[count] == controlFieldStackCache[count]):
+		if (
+			(oldUniqueID is not None or newUniqueID is not None)
+			and newUniqueID == oldUniqueID
+		) or (newControlFieldStack[count] == controlFieldStackCache[count]):
 			commonFieldCount += 1
 		else:
 			break
@@ -1298,7 +1318,8 @@ def getTextInfoSpeech(  # noqa: C901
 	# Similar to before, but If the most inner clickable is exited, then we
 	# allow announcing clickable for the next lot of clickable fields entered.
 	inClickable = False
-	# Move through the field commands, getting speech text for all controlStarts, controlEnds and formatChange commands
+	# Move through the field commands, getting speech text for all controlStarts, controlEnds and formatChange
+	# commands
 	# But also keep newControlFieldStack up to date as we will need it for the ends
 	# Add any text to a separate list, as it must be handled differently.
 	# Also make sure that LangChangeCommand objects are added before any controlField or formatField speech
@@ -1490,30 +1511,31 @@ def getPropertiesSpeech(  # noqa: C901
 		speakRole = False
 	roleText: Optional[str] = propertyValues.get('roleText')
 	if (
-			speakRole
-			and (
-				roleText
-				or reason not in (
-					OutputReason.SAYALL,
-					OutputReason.CARET,
-					OutputReason.FOCUS
-				)
-				or not (
-					name
-					or value
-					or cellCoordsText
-					or rowNumber
-					or columnNumber
-				)
-				or role not in controlTypes.silentRolesOnFocus
+		speakRole
+		and (
+			roleText
+			or reason not in (
+				OutputReason.SAYALL,
+				OutputReason.CARET,
+				OutputReason.FOCUS
 			)
-			and (
-				role != controlTypes.ROLE_MATH
-				or reason not in (
-					OutputReason.CARET,
-					OutputReason.SAYALL
-				)
-			)):
+			or not (
+				name
+				or value
+				or cellCoordsText
+				or rowNumber
+				or columnNumber
+			)
+			or role not in controlTypes.silentRolesOnFocus
+		)
+		and (
+			role != controlTypes.ROLE_MATH
+			or reason not in (
+				OutputReason.CARET,
+				OutputReason.SAYALL
+			)
+		)
+	):
 		textList.append(roleText if roleText else controlTypes.roleLabels[role])
 	if value:
 		textList.append(value)
@@ -1583,7 +1605,7 @@ def getPropertiesSpeech(  # noqa: C901
 			oldColumnSpan = columnSpan
 		if includeTableCellCoords and not cellCoordsText and rowSpan > 1 and columnSpan > 1:
 			# Translators: Speaks the row and column span added to the current row and column numbers
-			#			(example output: through row 5 column 3).
+			# (example output: through row 5 column 3).
 			rowColSpanTranslation: str = _("through row {row} column {column}").format(
 				row=rowNumber + rowSpan - 1,
 				column=columnNumber + columnSpan - 1
@@ -1787,7 +1809,8 @@ def getControlFieldSpeech(  # noqa: C901
 				_tableID=tableID,
 				rowCount=rowCount,
 				columnCount=columnCount
-			))
+			)
+		)
 		tableSeq.extend(levelSequence)
 		types.logBadSequenceTypes(tableSeq)
 		return tableSeq
@@ -1833,22 +1856,27 @@ def getControlFieldSpeech(  # noqa: C901
 
 	content = attrs.get("content")
 	# General cases.
-	if ((
-		speakEntry and ((
-						speakContentFirst
-						and fieldType in ("end_relative", "end_inControlFieldStack")
-						)
-						or (
-						not speakContentFirst
-						and fieldType in ("start_addedToControlFieldStack", "start_relative")
-						))
-	)
-			or (
-		speakWithinForLine
-		and not speakContentFirst
-		and not extraDetail
-		and fieldType == "start_inControlFieldStack"
-	)):
+	if (
+		(
+			speakEntry
+			and (
+				(
+					speakContentFirst
+					and fieldType in ("end_relative", "end_inControlFieldStack")
+				)
+				or (
+					not speakContentFirst
+					and fieldType in ("start_addedToControlFieldStack", "start_relative")
+				)
+			)
+		)
+		or (
+			speakWithinForLine
+			and not speakContentFirst
+			and not extraDetail
+			and fieldType == "start_inControlFieldStack"
+		)
+	):
 		out = []
 		if content and speakContentFirst:
 			out.append(content)
@@ -1888,15 +1916,16 @@ def getControlFieldSpeech(  # noqa: C901
 		types.logBadSequenceTypes(out)
 		return out
 	elif (
-			fieldType in (
-				"end_removedFromControlFieldStack",
-				"end_relative",
-			)
-			and roleTextSequence
-			and (
-				(not extraDetail and speakExitForLine)
-				or (extraDetail and speakExitForOther)
-			)):
+		fieldType in (
+			"end_removedFromControlFieldStack",
+			"end_relative",
+		)
+		and roleTextSequence
+		and (
+			(not extraDetail and speakExitForLine)
+			or (extraDetail and speakExitForOther)
+		)
+	):
 		if all(isinstance(item, str) for item in roleTextSequence):
 			joinedRoleText = " ".join(roleTextSequence)
 			out = [
@@ -1983,9 +2012,15 @@ def getFormatFieldSpeech(  # noqa: C901
 		# one column. This would be verbose, in the standard case.
 		# column number has changed, or the columnCount has changed
 		# but not if the columnCount is 1 or less and there is no old columnCount.
-		if (((textColumnNumber and textColumnNumber != oldTextColumnNumber) or
-			 (textColumnCount and textColumnCount != oldTextColumnCount)) and not
-				(textColumnCount and int(textColumnCount) <= 1 and oldTextColumnCount is None)):
+		if (
+			(
+				(textColumnNumber and textColumnNumber != oldTextColumnNumber)
+				or (textColumnCount and textColumnCount != oldTextColumnCount)
+			)
+			and not (
+				textColumnCount and int(textColumnCount) <= 1 and oldTextColumnCount is None
+			)
+		):
 			if textColumnNumber and textColumnCount:
 				# Translators: Indicates the text column number in a document.
 				# {0} will be replaced with the text column number.
@@ -2021,8 +2056,17 @@ def getFormatFieldSpeech(  # noqa: C901
 		oldHeadingLevel = attrsCache.get("heading-level") if attrsCache is not None else None
 		# headings should be spoken not only if they change, but also when beginning to speak lines or paragraphs
 		# Ensuring a similar experience to if a heading was a controlField
-		if (headingLevel and (initialFormat and (reason == OutputReason.FOCUS or unit in (
-				textInfos.UNIT_LINE, textInfos.UNIT_PARAGRAPH)) or headingLevel != oldHeadingLevel)):
+		if (
+			headingLevel
+			and (
+				initialFormat
+				and (
+					reason == OutputReason.FOCUS
+					or unit in (textInfos.UNIT_LINE, textInfos.UNIT_PARAGRAPH)
+				)
+				or headingLevel != oldHeadingLevel
+			)
+		):
 			# Translators: Speaks the heading level (example output: heading level 2).
 			text = _("heading level %d") % headingLevel
 			textList.append(text)
@@ -2113,17 +2157,21 @@ def getFormatFieldSpeech(  # noqa: C901
 		oldRevision = attrsCache.get("revision-insertion") if attrsCache is not None else None
 		if (revision or oldRevision is not None) and revision != oldRevision:
 			# Translators: Reported when text is marked as having been inserted
-			text = (_("inserted") if revision
-					# Translators: Reported when text is no longer marked as having been inserted.
-					else _("not inserted"))
+			text = (
+				_("inserted") if revision
+				# Translators: Reported when text is no longer marked as having been inserted.
+				else _("not inserted")
+			)
 			textList.append(text)
 		revision = attrs.get("revision-deletion")
 		oldRevision = attrsCache.get("revision-deletion") if attrsCache is not None else None
 		if (revision or oldRevision is not None) and revision != oldRevision:
 			# Translators: Reported when text is marked as having been deleted
-			text = (_("deleted") if revision
-					# Translators: Reported when text is no longer marked as having been  deleted.
-					else _("not deleted"))
+			text = (
+				_("deleted") if revision
+				# Translators: Reported when text is no longer marked as having been  deleted.
+				else _("not deleted")
+			)
 			textList.append(text)
 		revision = attrs.get("revision")
 		oldRevision = attrsCache.get("revision") if attrsCache is not None else None
@@ -2141,9 +2189,11 @@ def getFormatFieldSpeech(  # noqa: C901
 		oldMarked = attrsCache.get("marked") if attrsCache is not None else None
 		if (marked or oldMarked is not None) and marked != oldMarked:
 			# Translators: Reported when text is marked
-			text = (_("marked") if marked
-					# Translators: Reported when text is no longer marked
-					else _("not marked"))
+			text = (
+				_("marked") if marked
+				# Translators: Reported when text is no longer marked
+				else _("not marked")
+			)
 			textList.append(text)
 	if formatConfig["reportEmphasis"]:
 		# strong text
@@ -2151,35 +2201,43 @@ def getFormatFieldSpeech(  # noqa: C901
 		oldStrong = attrsCache.get("strong") if attrsCache is not None else None
 		if (strong or oldStrong is not None) and strong != oldStrong:
 			# Translators: Reported when text is marked as strong (e.g. bold)
-			text = (_("strong") if strong
-					# Translators: Reported when text is no longer marked as strong (e.g. bold)
-					else _("not strong"))
+			text = (
+				_("strong") if strong
+				# Translators: Reported when text is no longer marked as strong (e.g. bold)
+				else _("not strong")
+			)
 			textList.append(text)
 		# emphasised text
 		emphasised = attrs.get("emphasised")
 		oldEmphasised = attrsCache.get("emphasised") if attrsCache is not None else None
 		if (emphasised or oldEmphasised is not None) and emphasised != oldEmphasised:
 			# Translators: Reported when text is marked as emphasised
-			text = (_("emphasised") if emphasised
-					# Translators: Reported when text is no longer marked as emphasised
-					else _("not emphasised"))
+			text = (
+				_("emphasised") if emphasised
+				# Translators: Reported when text is no longer marked as emphasised
+				else _("not emphasised")
+			)
 			textList.append(text)
 	if formatConfig["reportFontAttributes"]:
 		bold = attrs.get("bold")
 		oldBold = attrsCache.get("bold") if attrsCache is not None else None
 		if (bold or oldBold is not None) and bold != oldBold:
 			# Translators: Reported when text is bolded.
-			text = (_("bold") if bold
-					# Translators: Reported when text is not bolded.
-					else _("no bold"))
+			text = (
+				_("bold") if bold
+				# Translators: Reported when text is not bolded.
+				else _("no bold")
+			)
 			textList.append(text)
 		italic = attrs.get("italic")
 		oldItalic = attrsCache.get("italic") if attrsCache is not None else None
 		if (italic or oldItalic is not None) and italic != oldItalic:
 			# Translators: Reported when text is italicized.
-			text = (_("italic") if italic
-					# Translators: Reported when text is not italicized.
-					else _("no italic"))
+			text = (
+				_("italic") if italic
+				# Translators: Reported when text is not italicized.
+				else _("no italic")
+			)
 			textList.append(text)
 		strikethrough = attrs.get("strikethrough")
 		oldStrikethrough = attrsCache.get("strikethrough") if attrsCache is not None else None
@@ -2187,10 +2245,12 @@ def getFormatFieldSpeech(  # noqa: C901
 			if strikethrough:
 				# Translators: Reported when text is formatted with double strikethrough.
 				# See http://en.wikipedia.org/wiki/Strikethrough
-				text = (_("double strikethrough") if strikethrough == "double"
-						# Translators: Reported when text is formatted with strikethrough.
-						# See http://en.wikipedia.org/wiki/Strikethrough
-						else _("strikethrough"))
+				text = (
+					_("double strikethrough") if strikethrough == "double"
+					# Translators: Reported when text is formatted with strikethrough.
+					# See http://en.wikipedia.org/wiki/Strikethrough
+					else _("strikethrough")
+				)
 			else:
 				# Translators: Reported when text is formatted without strikethrough.
 				# See http://en.wikipedia.org/wiki/Strikethrough
@@ -2200,9 +2260,11 @@ def getFormatFieldSpeech(  # noqa: C901
 		oldUnderline = attrsCache.get("underline") if attrsCache is not None else None
 		if (underline or oldUnderline is not None) and underline != oldUnderline:
 			# Translators: Reported when text is underlined.
-			text = (_("underlined") if underline
-					# Translators: Reported when text is not underlined.
-					else _("not underlined"))
+			text = (
+				_("underlined") if underline
+				# Translators: Reported when text is not underlined.
+				else _("not underlined")
+			)
 			textList.append(text)
 		hidden = attrs.get("hidden")
 		oldHidden = attrsCache.get("hidden") if attrsCache is not None else None
@@ -2369,16 +2431,20 @@ def getFormatFieldSpeech(  # noqa: C901
 				text = ""
 			if text:
 				textList.append(text)
-	# The line-prefix formatField attribute contains the text for a bullet or number for a list item, when the bullet or number does not appear in the actual text content.
-	# Normally this attribute could be repeated across formatFields within a list item and therefore is not safe to speak when the unit is word or character.
-	# However, some implementations (such as MS Word with UIA) do limit its useage to the very first formatField of the list item.
+	# The line-prefix formatField attribute contains the text for a bullet or number for a list item, when
+	# the bullet or number does not appear in the actual text content.
+	# Normally this attribute could be repeated across formatFields within a list item and therefore is not
+	# safe to speak when the unit is word or character.
+	# However, some implementations (such as MS Word with UIA) do limit its useage to the very first
+	# formatField of the list item.
 	# Therefore, they also expose a line-prefix_speakAlways attribute to allow its usage for any unit.
 	linePrefix_speakAlways = attrs.get('line-prefix_speakAlways', False)
 	if linePrefix_speakAlways or unit in (
-			textInfos.UNIT_LINE,
-			textInfos.UNIT_SENTENCE,
-			textInfos.UNIT_PARAGRAPH,
-			textInfos.UNIT_READINGCHUNK):
+		textInfos.UNIT_LINE,
+		textInfos.UNIT_SENTENCE,
+		textInfos.UNIT_PARAGRAPH,
+		textInfos.UNIT_READINGCHUNK
+	):
 		linePrefix = attrs.get("line-prefix")
 		if linePrefix:
 			textList.append(linePrefix)

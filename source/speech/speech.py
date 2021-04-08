@@ -2198,8 +2198,8 @@ def getFormatFieldSpeech(  # noqa: C901
 		strong = attrs.get("strong")
 		oldStrong = attrsCache.get("strong") if attrsCache is not None else None
 		if (strong or oldStrong is not None) and strong != oldStrong:
-			# Translators: Reported when text is marked as strong (e.g. bold)
 			text = (
+				# Translators: Reported when text is marked as strong (e.g. bold)
 				_("strong") if strong
 				# Translators: Reported when text is no longer marked as strong (e.g. bold)
 				else _("not strong")
@@ -2257,8 +2257,8 @@ def getFormatFieldSpeech(  # noqa: C901
 		underline = attrs.get("underline")
 		oldUnderline = attrsCache.get("underline") if attrsCache is not None else None
 		if (underline or oldUnderline is not None) and underline != oldUnderline:
-			# Translators: Reported when text is underlined.
 			text = (
+				# Translators: Reported when text is underlined.
 				_("underlined") if underline
 				# Translators: Reported when text is not underlined.
 				else _("not underlined")

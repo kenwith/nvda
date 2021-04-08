@@ -92,7 +92,6 @@ def initialize():
 
 def terminate():
 	synthDriverHandler.setSynth(None)
-	speechViewerObj = None
 
 
 #: If a chunk of text contains only these characters, it will be considered blank.
@@ -250,7 +249,6 @@ def getSpellingSpeech(  # noqa: C901
 	synthConfig = config.conf["speech"][synth.name]
 	charMode = False
 	textLength = len(text)
-	count = 0
 	localeHasConjuncts = True if locale.split('_', 1)[0] in LANGS_WITH_CONJUNCT_CHARS else False
 	charDescList = getCharDescListFromText(text, locale) if localeHasConjuncts else text
 	for item in charDescList:

@@ -2186,8 +2186,8 @@ def getFormatFieldSpeech(  # noqa: C901
 		marked = attrs.get("marked")
 		oldMarked = attrsCache.get("marked") if attrsCache is not None else None
 		if (marked or oldMarked is not None) and marked != oldMarked:
-			# Translators: Reported when text is marked
 			text = (
+				# Translators: Reported when text is marked
 				_("marked") if marked
 				# Translators: Reported when text is no longer marked
 				else _("not marked")
@@ -2209,8 +2209,8 @@ def getFormatFieldSpeech(  # noqa: C901
 		emphasised = attrs.get("emphasised")
 		oldEmphasised = attrsCache.get("emphasised") if attrsCache is not None else None
 		if (emphasised or oldEmphasised is not None) and emphasised != oldEmphasised:
-			# Translators: Reported when text is marked as emphasised
 			text = (
+				# Translators: Reported when text is marked as emphasised
 				_("emphasised") if emphasised
 				# Translators: Reported when text is no longer marked as emphasised
 				else _("not emphasised")
@@ -2220,8 +2220,8 @@ def getFormatFieldSpeech(  # noqa: C901
 		bold = attrs.get("bold")
 		oldBold = attrsCache.get("bold") if attrsCache is not None else None
 		if (bold or oldBold is not None) and bold != oldBold:
-			# Translators: Reported when text is bolded.
 			text = (
+				# Translators: Reported when text is bolded.
 				_("bold") if bold
 				# Translators: Reported when text is not bolded.
 				else _("no bold")
@@ -2230,8 +2230,8 @@ def getFormatFieldSpeech(  # noqa: C901
 		italic = attrs.get("italic")
 		oldItalic = attrsCache.get("italic") if attrsCache is not None else None
 		if (italic or oldItalic is not None) and italic != oldItalic:
-			# Translators: Reported when text is italicized.
 			text = (
+				# Translators: Reported when text is italicized.
 				_("italic") if italic
 				# Translators: Reported when text is not italicized.
 				else _("no italic")
@@ -2241,9 +2241,9 @@ def getFormatFieldSpeech(  # noqa: C901
 		oldStrikethrough = attrsCache.get("strikethrough") if attrsCache is not None else None
 		if (strikethrough or oldStrikethrough is not None) and strikethrough != oldStrikethrough:
 			if strikethrough:
-				# Translators: Reported when text is formatted with double strikethrough.
-				# See http://en.wikipedia.org/wiki/Strikethrough
 				text = (
+					# Translators: Reported when text is formatted with double strikethrough.
+					# See http://en.wikipedia.org/wiki/Strikethrough
 					_("double strikethrough") if strikethrough == "double"
 					# Translators: Reported when text is formatted with strikethrough.
 					# See http://en.wikipedia.org/wiki/Strikethrough

@@ -17,8 +17,7 @@ import api
 import controlTypes
 from controlTypes import OutputReason
 import tones
-import synthDriverHandler
-from synthDriverHandler import getSynth, setSynth
+from synthDriverHandler import getSynth
 import re
 import textInfos
 import speechDictHandler
@@ -82,16 +81,6 @@ oldRowNumber = None
 oldRowSpan = None
 oldColumnNumber = None
 oldColumnSpan = None
-
-
-def initialize():
-	"""Loads and sets the synth driver configured in nvda.ini."""
-	synthDriverHandler.initialize()
-	setSynth(config.conf["speech"]["synth"])
-
-
-def terminate():
-	synthDriverHandler.setSynth(None)
 
 
 #: If a chunk of text contains only these characters, it will be considered blank.

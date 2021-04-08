@@ -30,7 +30,6 @@ from .speech import (
 	IDT_BASE_FREQUENCY,
 	IDT_MAX_SPACES,
 	IDT_TONE_DURATION,
-	initialize,
 	isBlank,
 	isPaused,
 	LANGS_WITH_CONJUNCT_CHARS,
@@ -65,7 +64,6 @@ from .speech import (
 	speechMode_talk,
 	spellTextInfo,
 	splitTextIndentation,
-	terminate,
 )
 
 from .priorities import Spri
@@ -119,7 +117,6 @@ __all__ = [
 	"IDT_BASE_FREQUENCY",
 	"IDT_MAX_SPACES",
 	"IDT_TONE_DURATION",
-	"initialize",
 	"isBlank",
 	"isPaused",
 	"LANGS_WITH_CONJUNCT_CHARS",
@@ -154,5 +151,17 @@ __all__ = [
 	"speechMode_talk",
 	"spellTextInfo",
 	"splitTextIndentation",
-	"terminate",
 ]
+
+import synthDriverHandler
+import config
+
+
+def initialize():
+	"""Loads and sets the synth driver configured in nvda.ini."""
+	synthDriverHandler.initialize()
+	synthDriverHandler.setSynth(config.conf["speech"]["synth"])
+
+
+def terminate():
+	synthDriverHandler.setSynth(None)

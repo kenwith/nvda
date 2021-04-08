@@ -51,6 +51,12 @@ if TYPE_CHECKING:
 CURSOR_CARET = 0
 CURSOR_REVIEW = 1
 CURSOR = Literal[CURSOR_REVIEW, CURSOR_CARET]
+SayAllHandler = None
+
+
+def initalize():
+	global SayAllHandler
+	SayAllHandler = _SayAllHandler()
 
 
 def _yieldIfNonEmpty(seq: SpeechSequence):
@@ -211,26 +217,10 @@ class SpeechWithoutPauses:
 class _SayAllHandler:
 	def __init__(self):
 		self.lastSayAllMode = None
-		self._speechWithoutPausesInstance = None
+		self.speechWithoutPausesInstance = SpeechWithoutPauses(speakFunc=speak)
 		#: The active say all manager.
 		#: This is a weakref because the manager should be allowed to die once say all is complete.
 		self._getActiveSayAll = lambda: None  # noqa: Return None when called like a dead weakref.
-
-	@property
-	def speechWithoutPausesInstance(self) -> SpeechWithoutPauses:
-		if self._speechWithoutPausesInstance is None:
-			log.error('attempting to use sayAll without calling initializeSpeechWithoutPauses first')
-			self.initializeSpeechWithoutPauses()  # TODO: or raise Error?
-			# raise AttributeError('call initializeSpeechWithoutPauses first before using sayAllHandler')
-		return self._speechWithoutPausesInstance
-
-	def initializeSpeechWithoutPauses(self):
-		'''
-		Initializes SpeechWithoutPauses, as this cannot always be done when `SayAllHandler` is being
-		imported without causing circular dependency issues.
-		'''
-		log.debug("initializing the speech without pauses instance for SayAllHandler")
-		self._speechWithoutPausesInstance = SpeechWithoutPauses(speakFunc=speak)
 
 	def stop(self):
 		'''
@@ -262,9 +252,6 @@ class _SayAllHandler:
 			return
 		self._getActiveSayAll = weakref.ref(reader)
 		reader.nextLine()
-
-
-SayAllHandler = _SayAllHandler()
 
 
 class _ObjectsReader(garbageHandler.TrackedObject):
